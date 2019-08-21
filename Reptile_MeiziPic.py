@@ -49,7 +49,7 @@ class reptileMeizi():
             os.makedirs(saveToPath)
         for picLink in picList:
             picName = picLink.split('/')[-1]
-            print(f"get + {rootPath} + '/' + {picLink}")
+            print(f"get {rootPath[:2]}/{picName}")
             html = requests.get(picLink)
             if html.status_code == 200:
                 with open(saveToPath + picName,"wb") as f:
