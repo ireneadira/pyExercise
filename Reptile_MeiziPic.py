@@ -16,7 +16,7 @@ class reptileMeizi():
         for i in range(5521,1,-1):
             url = f'https://www.meizitu.com/a/{i}.html'
             self.picQueue.put(url)
-            print('put completed XD')
+        print('put this station all link completed XD')
 
     # 开启程序 调用下方函数
     def startMain(self, threadName):
@@ -49,7 +49,7 @@ class reptileMeizi():
             os.makedirs(saveToPath)
         for picLink in picList:
             picName = picLink.split('/')[-1]
-            print(f'get {picLink}')
+            print(f"get + {rootPath} + '/' + {picLink}")
             html = requests.get(picLink)
             if html.status_code == 200:
                 with open(saveToPath + picName,"wb") as f:
