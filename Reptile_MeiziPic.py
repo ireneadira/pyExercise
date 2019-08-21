@@ -8,7 +8,6 @@ from time import sleep
 from queue import Queue
 from threading import Thread
 
-
 # 传入数据: url:网址 rootpath:图片页所在标题作为本地存储根目录
 class reptileMeizi():
     def __init__(self):
@@ -16,7 +15,7 @@ class reptileMeizi():
         for i in range(5521,1,-1):
             url = f'https://www.meizitu.com/a/{i}.html'
             self.picQueue.put(url)
-        print('put this station all link completed XD')
+        print('put this station link completed XD')
 
     # 开启程序 调用下方函数
     def startMain(self, threadName):
@@ -69,7 +68,9 @@ class reptileMeizi():
             for wait in threadList:
                 wait.join()
 
+
 if __name__ == '__main__':
     # tempLate = 'https://www.meizitu.com/a/5521.html' # first Page
     reptile = reptileMeizi()
     reptile.startThread()
+    print('unbeliveable XD')
