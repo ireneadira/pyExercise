@@ -60,6 +60,8 @@ class reptileMeizi():
     # 多线程模块
     def startThread(self):
         while True:
+            if self.picQueue.empty():
+                break
             threadList = []
             for threadName in range(5):
                 thread = Thread(target=self.startMain ,args=(threadName,))
