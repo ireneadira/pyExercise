@@ -3,7 +3,21 @@ import requests
 import execjs
 import re
 import os
+from urllib import parse
 
+headers = {
+"Referer": "http://www.beian.miit.gov.cn/icp/publish/query/icpMemoInfo_showPage.action",
+"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+"Accept-Language": "zh-Hans-CN,zh-Hans;q=0.5",
+"Upgrade-Insecure-Requests": "1",
+"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362",
+"Accept-Encoding": "gzip, deflate",
+"Host": "www.beian.miit.gov.cn",
+"Connection": "Keep-Alive"
+}
+
+
+'''
 # headers_1 未访问前的headers
 headers_1 = {
 "Referer": "http://www.beian.miit.gov.cn/icp/publish/query/icpMemoInfo_showPage.action",
@@ -19,13 +33,14 @@ headers_1 = {
 
 # 第二次访问所携带的headers
 headers_2 = {
+"Referer": "http://www.beian.miit.gov.cn/icp/publish/query/icpMemoInfo_showPage.action",
 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
 "Accept-Language": "zh-Hans-CN,zh-Hans;q=0.5",
 "Upgrade-Insecure-Requests": "1",
 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362",
 "Accept-Encoding": "gzip, deflate",
 "Host": "www.beian.miit.gov.cn",
-"Connection": "Keep-Alive",
+"Connection": "Keep-Alive"
 }
 
 # "Cookie": "__jsluid_h=5204b625eade136c51b0eb3f31f31bc8; __jsl_clearance=1569216821.114|0|pqpny3Pj21I%2BpAf95jogoOQgIw4%3D"
@@ -47,7 +62,7 @@ zzz = ctx.eval('gcoo')
 c_start = zzz.find('cookie')
 c_end = zzz.find("+';Expires=")
 cookie_code = zzz[c_start:c_end]
-cookie_js = 'var ' + cookie_code + ';return cookie;'   # 如果调用Chrome来渲染js 则需要return
+cookie_js = 'var ' + cookie_code + ';return cookie;'   # 如果调用Chrome来渲染js 则需要return 注意这里函数名不要带括号
 # cookie_js = 'var ' + cookie_code + ';'
 print(cookie_js)
 
@@ -58,7 +73,7 @@ options = webdriver.ChromeOptions()
 # options.add_argument('--headless')
 options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362')
 browser = webdriver.Chrome(options=options)
-# browser.get('https://www.baidu.com')
+browser.get('https://www.baidu.com')
 cookie = browser.execute_script(cookie_js)
 print(cookie)
 
@@ -70,9 +85,13 @@ print(cookie)
 # cookie = ctx.eval(js_encode)
 # print(cookie)
 
-
 cooke_value = r.headers['Set-Cookie'].split(' ')[0] + cookie + ';'
+
+cooke_value = parse.unquote(cooke_value)
+
 cookie_dict = {"Cookie": cooke_value}
+
+
 headers_2.update(cookie_dict)
 
 print(headers_2)
@@ -81,3 +100,28 @@ r = requests.get(url, headers=headers_2)
 print(r.status_code)
 
 # 参考: https://www.cnblogs.com/chenhuabin/p/10946085.html#_label2_0
+'''
+
+
+url = 'http://www.beian.miit.gov.cn/icp/publish/query/icpMemoInfo_showPage.action'
+
+
+options = webdriver.ChromeOptions()
+# options.add_argument('--headless')
+options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18362')
+browser = webdriver.Chrome(options=options)
+browser.get(url)
+# cookie = browser.execute_script(cookie_js)
+
+cookie_str = browser.get_cookies()
+jsl_clearance= cookie_str[0]['value']
+jsluid_h = cookie_str[1]['value']
+Cookie = str('__jsluid_h=' + jsluid_h + ';' + ' __jsl_clearance=' + jsl_clearance)
+print(Cookie)
+
+headers.update({'Cookie': Cookie})
+r_cookie = requests.get(url, headers=headers)
+DeCookie = r_cookie.headers['Set-Cookie'].split('path=')[0].strip() + Cookie
+print(DeCookie)
+print(r_cookie.status_code)
+
