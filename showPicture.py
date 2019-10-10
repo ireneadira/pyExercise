@@ -1,14 +1,27 @@
-import matplotlib.pyplot as plt # plt 用于显示图片
-import matplotlib.image as mpimg # mpimg 用于读取图片
- 
-lena = mpimg.imread('picDir') # 读取和代码处于同一目录下的 lena.png
-# 此时 lena 就已经是一个 np.array 了，可以对它进行任意处理
-# lena.shape #(512, 512, 3)
- 
-plt.imshow(lena) # 显示图片
-plt.axis('off') # 不显示坐标轴
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+
+# 读取图片
+lena = mpimg.imread('J:/webShotImg/7/6/6/IMG_www.76665359.com_20191010085754.png')
+# 调整显示框名字 大小
+plt.figure('Bangde',figsize=(10, 6))
+# 调整显示位置
+mngr = plt.get_current_fig_manager()
+mngr.window.wm_geometry("+0+0")
+# 设置显示
+plt.imshow(lena)
+# 关闭横纵坐标
+plt.axis('off')
+# 铺满显示
+plt.gca().xaxis.set_major_locator(plt.NullLocator())
+plt.gca().yaxis.set_major_locator(plt.NullLocator())
+plt.subplots_adjust(top=1,bottom=0,left=0,right=1,hspace=0,wspace=0)
+# 开始绘画
 plt.draw()
+# 显示 如果不加pause会出错 = =
 plt.pause(3)
+# 关闭
 plt.close()
 
-# 原网址: 1: https://www.cnblogs.com/lantingg/p/9259840.html 2: https://blog.csdn.net/qq_36248632/article/details/90321044
+# https://blog.csdn.net/baidu_36669549/article/details/91046029
+# https://blog.csdn.net/ygfrancois/article/details/85268982
