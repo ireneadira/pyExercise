@@ -3,7 +3,7 @@ import re
 
 # 判断是否含有乱码 乱码超过20% 则判定该title是乱码 返回False
 def get_codetype(title_code):
-    judge_err = re.compile("([\u4E00-\u9FA5]|[\u0030-\u0039]|[\u0041-\u005a]|[\u0061-\u007a]|[\u0020-\u002F]|\u00A0)",re.S)
+    judge_err = re.compile("([\u4E00-\u9FA5]|[\u0020-\u007E]|[\u3008-\u3011]|\u00A0)",re.S)
     ju_list = judge_err.findall(title_code)
     title_len = len(title_code)
     ju_len = len(ju_list)
