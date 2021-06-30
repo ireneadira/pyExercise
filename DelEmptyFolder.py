@@ -11,4 +11,4 @@ def delNullFile(path):
                 os.rmdir(i + '/' + sonpath)
 
 if __name__ == '__main__':
-    delNullFile('F:/testDir/MeiZiPic')
+    delNullFile('F:/testDir')
